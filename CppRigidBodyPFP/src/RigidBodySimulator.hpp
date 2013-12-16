@@ -43,6 +43,13 @@ public:
     {
 	return m_circles.size() / 3 - 1;
     }
+    
+    //new method to return no. of robots for gradient calculations
+    // +when robots.size = 0, goal reached
+    int GetNrRobots(void) const
+    {
+    	return m_robot.m_theta.size(); //can also use m_x.size() or m_y.size()
+    }
 
     /**
      *@brief Returns closest point on the i-th circle obstacle to point [x, y]
@@ -102,14 +109,14 @@ protected:
 
     std::vector<double> m_circles;
 
-    struct Robot
+    struct Robot //now defines a super-robot structure
     {
-	std::vector<double> m_initVertices;
-	std::vector<double> m_currVertices;
-	std::vector<int>    m_triangles;
-	double              m_x;
-	double              m_y;
-	double              m_theta;
+	std::vector<std::vector<double>> m_initVertices;
+	std::vector<std::vector<double>> m_currVertices;
+	std::vector<std::vector<int>>    m_triangles;
+	std::vector<double> m_x;
+	std::vector<double> m_y;
+	std::vector<double> m_theta;
     };
 	
     Robot m_robot;
