@@ -1,21 +1,37 @@
 #include "RigidBodySimulator.hpp"
 
-RigidBodySimulator::RigidBodySimulator(void)
+RigidBodySimulator::RigidBodySimulator(void) //original/default constructor 
+{
+	//must use pushback-> insert single sub-robot configuration into super-robot at default configuration
+	m_robot.m_x.push_back(0);
+	m_robot.m_y.push_back(0);
+	m_robot.m_theta.push_back(0);
+	
+	m_circles.push_back(16); //goal x
+	m_circles.push_back(-7); //goal y
+	m_circles.push_back(1.0); //goal radius
+}
+
+RigidBodySimulator::RigidBodySimulator(int number_of_bots) //
 {
 	//change to initialize every robot at a different location, positioned across the workspace at a uniform-random distribution
 	/*NOTE: number of robots not known til ReadRobot is called,
 	must create a way to find it by time of or on constructor call*/
-	for(int i=0; i</*NUMBER OF ROBOTS*/; i++)
+	for(int i=0; i<number_of_bots; i++)
 	{
-		//m_robot.m_x = m_robot.m_y = m_robot.m_theta = 0;    
-		//Must know the dimensions of workspace to use as range when generating coordinates
-		m_robot.m_x[i] = ;/*rand using x-range coordinates*/
-		m_robot.m_y[i] = ;/*rand using y-range coordinates*/
-		m_robot.m_theta[i] = 0;
+		//workspace goes from (-22,-14) on bottom left to (22,14) on top right
+		m_robot.m_x.push_back(pow(-1,rand()%2)*rand()%22); /*rand using x-range coordinates -22~22*/
+		m_robot.m_y.push_back(pow(-1,rand()%2)*rand()%14); /*rand using y-range coordinates* -14~14*/
+		/*should replace rand() above with function that returns a float/double instead of int for better implementation*/
+		m_robot.m_theta.push_back(0);
+		
+		/**WILL ALSO NEED TO CHECK EACH NEW SUB-ROBOT FOR COLLISION BEFORE ADDING IT TO SUPER-ROBOT
+		PROBABLY GENERATE PARAMETERS FIRST, CHECK FOR COLLISION, THEN
+		IF NO COLLISION -> PUSH_BACK PARAMETERS, ELSE DO NOTHING*/
 	}
-	m_circles.push_back(16);
-	m_circles.push_back(-7);
-	m_circles.push_back(1.0);
+	m_circles.push_back(16); //goal x
+	m_circles.push_back(-7); //goal y
+	m_circles.push_back(1.0); //goal radius
 }
 
 RigidBodySimulator::~RigidBodySimulator(void)
