@@ -57,24 +57,24 @@ public:
     Point ClosestPointOnObstacle(const int i, const double x, const double y);
 
 
-    double GetRobotX(void) const
+    double GetRobotX(int i) const
     {
-	return m_robot.m_x;
+	return m_robot.m_x[i];
     }
     
-    double GetRobotY(void) const
+    double GetRobotY(int i) const
     {
-	return m_robot.m_y;
+	return m_robot.m_y[i];
     }
     
-    double GetRobotTheta(void) const
+    double GetRobotTheta(int i) const
     {
-	return m_robot.m_theta;
+	return m_robot.m_theta[i];
     }
 
-    int GetNrRobotVertices(void) const
+    int GetNrRobotVertices(int i) const
     {
-	return m_robot.m_currVertices.size() / 2;
+	return m_robot.m_currVertices[i].size() / 2;
     }
     
     /*
@@ -82,20 +82,20 @@ public:
      * So the x-coord of the i-th vertex is at index 2 * i
      * and the y-coord of the i-th vertex is at index 2 * i + 1
      */
-    const double* GetRobotVertices(void) const
+    const double* GetRobotVertices(int i) const
     {
-	return &(m_robot.m_currVertices[0]);
+	return &(m_robot.m_currVertices[i][0]);
     }
 
     /**
      *@brief Returns true iff the robot center is inside the goal circle
      */
-    bool HasRobotReachedGoal(void) const
+    bool HasRobotReachedGoal(int i) const
     {
 	const double gx = GetGoalCenterX();
 	const double gy = GetGoalCenterY();
-	const double rx = GetRobotX();
-	const double ry = GetRobotY();
+	const double rx = GetRobotX(i);
+	const double ry = GetRobotY(i);
 	
 	return 
 	    sqrt((gx - rx) * (gx - rx) + (gy - ry) * (gy - ry)) <= GetGoalRadius();
