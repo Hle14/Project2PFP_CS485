@@ -21,15 +21,15 @@ RigidBodyPlanner::~RigidBodyPlanner(void)
 }
 
 
-RigidBodyMove RigidBodyPlanner::ConfigurationMove(void)
+RigidBodyMove RigidBodyPlanner::ConfigurationMove(int i)
 {
 	RigidBodyMove move;
 	
-	int verts = m_simulator->GetNrRobotVertices();
-	const double* vertices = m_simulator->GetRobotVertices();
-	double theta = m_simulator->GetRobotTheta();
-	double x = m_simulator->GetRobotX();
-	double y = m_simulator->GetRobotY();
+	int verts = m_simulator->GetNrRobotVertices(i);
+	const double* vertices = m_simulator->GetRobotVertices(i);
+	double theta = m_simulator->GetRobotTheta(i);
+	double x = m_simulator->GetRobotX(i);
+	double y = m_simulator->GetRobotY(i);
 	double gx = m_simulator->GetGoalCenterX();
 	double gy = m_simulator->GetGoalCenterY();
 	int obs = m_simulator->GetNrObstacles();
