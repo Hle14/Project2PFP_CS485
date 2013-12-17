@@ -128,13 +128,7 @@ void RigidBodySimulator::ReadRobot(const char fname[]){
 				else
 					printf(" %d ", m_robot.m_triangles[k]);
 			
-			 m_robot.m_initVertices.assign(	
-									m_robot.m_currVertices.begin(),
-									m_robot.m_currVertices.end());
-			
-			if(n>1){ //the txt file has more than one robot
-				
-			}
+			 m_robot.m_initVertices.assign(m_robot.m_currVertices.begin(),m_robot.m_currVertices.end());
 		
 		}// end of FOR-LOOP
     
