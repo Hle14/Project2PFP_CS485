@@ -55,7 +55,8 @@ public:
      *@brief Returns closest point on the i-th circle obstacle to point [x, y]
      */
     Point ClosestPointOnObstacle(const int i, const double x, const double y);
-
+    double DistanceToRobot(const int i, const int j); //where i = current sub-robot's index, j = index of sub-robot against which distance is being measured
+    bool NotInCollision(const int i, const int j); //where i = current sub-robot's index, j = index of sub-robot against which distance is being measured
 
     double GetRobotX(int i) const
     {
