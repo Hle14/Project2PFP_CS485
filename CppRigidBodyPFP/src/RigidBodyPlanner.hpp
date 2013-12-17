@@ -5,9 +5,9 @@
 
 struct RigidBodyMove
 {
-    double m_dx;
-    double m_dy;
-    double m_dtheta;
+    vector<double> m_dx;
+    vector<double> m_dy;
+    vector<double> m_dtheta;
 };
 
 class RigidBodyPlanner
