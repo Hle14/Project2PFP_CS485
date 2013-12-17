@@ -63,6 +63,29 @@ public:
     	
     	return distance >= (r2 + r1);
     }
+    
+    Point GetCentroid(int i)
+    {
+    	double A = 0;
+    	double x1,y1,x2,y2;
+    	for(int j=0; j<m_robot.m_currVertices[i].size(); j+=2)
+    	{
+    		x1 = m_robot.m_initVertices[i][j];
+    		y1 = m_robot.m_initVertices[i][j+1];
+    		x2 = m_robot.m_initVertices[i][j+2];
+    		y2 = m_robot.m_initVertices[i][j+3]
+    		A += 0.5*(x1*y2 - x2*y1);
+    	}
+    	double sumX,sumY;
+    	sumX = sumY = 0;
+    	for(int j=0; j<m_robot.m_currVertices[i].size(); j+=2)
+    	{
+    		sumX += (x1 + x2)*(x1*y2 - x2*y1);
+    		sumY += (y1 + y2)*(x1*y2 - x2*y1);
+    	}
+    	
+    	return Point(sumX/(6.0*A),sumY/(6.0*A));
+    }
 
     double GetRobotX(int i) const
     {
