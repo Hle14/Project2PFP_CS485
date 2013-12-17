@@ -133,7 +133,7 @@ public:
     
     
 protected:
-    void AddToRobotConfiguration(const double dx, const double dy, const double dtheta);
+    void AddToRobotConfiguration(int r, const double dx, const double dy, const double dtheta);
 
     void ReadRobot(const char fname[]);
 
