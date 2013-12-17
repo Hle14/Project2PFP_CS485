@@ -55,11 +55,14 @@ void Graphics::MainLoop(void)
 
 void Graphics::HandleEventOnTimer(void)
 {
-    if(m_run && !m_simulator.HasRobotReachedGoal())
-    {
-	RigidBodyMove move = m_planner->ConfigurationMove();
-	m_simulator.AddToRobotConfiguration(move.m_dx, move.m_dy, move.m_dtheta);	
-    }
+	for(int i=0; i<m_simulator.GetNrRobots(); i++)
+	{
+		if(m_run && !m_simulator.HasRobotReachedGoal())
+		{
+			RigidBodyMove move = m_planner->ConfigurationMove(i);
+			m_simulator.AddToRobotConfiguration(i,move.m_dx, move.m_dy, move.m_dtheta);	
+		}
+	}
 } 
 
 void Graphics::HandleEventOnMouseMotion(const double mousePosX, const double mousePosY)
