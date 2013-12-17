@@ -80,8 +80,74 @@ void RigidBodySimulator::AddToRobotConfiguration(int r, const double dx, const d
 
 }
 
+//new function
+void RigidBodySimulator::ReadRobot(const char fname[]){
+    FILE *in = fopen(fname, "r");
+    
+    int   n  = 0;
+    int num;
+    int i=0;
+    int line[n]; //will store all vertices of the total #-of robots
+    
+    if(in){
+		// n -should print the number of vertices read 
+		
+		if(fscanf(in, "%d", &n ) != 1)
+			return;
+		// n, stores the number of robots 
+		printf("\nNumber of Robots: %d===========================>", n);
+		
+		//gets the line of vertices
+		while( i != n && fscanf(in, "%d", &num) > 0  ){
+			line[i] = num;	
+			printf("\nRobot <%d> has <%d> Vertices", i, line[i]);
+			i++;
+		}
+		
+		//line[i] = n
+    
+		for (int j=0; j<n; j++){
+			m_robot.m_currVertices.resize(2 * line[j]);
+			
+			printf("\nNumber of vertices <%d> ", line[j]);       
+			
+			for(i = 0; i < 2 * line[j]; i++){
+				if(fscanf(in, "%lf", &(m_robot.m_currVertices[i])) != 1)	
+					return;
+					
+				printf("\n %f", m_robot.m_currVertices[i] );
+			}
+			
+			m_robot.m_triangles.resize(3 * (line[j] - 2) );
+			printf("\nNumber of Triangles: %d\n",(int) m_robot.m_triangles.size());
+			
+			for(int k = 0; k < (int) m_robot.m_triangles.size(); ++k)
+				if(fscanf(in, "%d", &(m_robot.m_triangles[k])) != 1)
+					return;
+				
+				else
+					printf(" %d ", m_robot.m_triangles[k]);
+			
+			 m_robot.m_initVertices.assign(	
+									m_robot.m_currVertices.begin(),
+									m_robot.m_currVertices.end());
+			
+			if(n>1){ //the txt file has more than one robot
+				
+			}
+		
+		}// end of FOR-LOOP
+    
+        fclose(in);            
+        
+    }        
+    else 	printf("..could not open file <%s>\n", fname);    
+}//end of READ-ROBOT
 
 
+
+
+/*
 void RigidBodySimulator::ReadRobot(const char fname[])
 {
     FILE *in = fopen(fname, "r");
@@ -114,6 +180,5 @@ void RigidBodySimulator::ReadRobot(const char fname[])
     else
 	printf("..could not open file <%s>\n", fname);    
 }
-
-
+*/
 
