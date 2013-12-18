@@ -163,6 +163,7 @@ protected:
 	std::vector<double> m_x;
 	std::vector<double> m_y;
 	std::vector<double> m_theta;
+	std::vector<double> dist_to_goal;
     };
 	
     Robot m_robot;
