@@ -55,6 +55,55 @@ void Graphics::MainLoop(void)
 
 void Graphics::HandleEventOnTimer(void)
 {
+	/*
+	struct DistAndIndex
+	{
+		int index;
+		double dist_to_goal;
+		DistAndIndex(int idx,double dtg) : dist_to_goal(dtg), index(idx) { }
+	};
+	
+	int NrRobots = m_simulator.GetNrRobots();
+	
+	vector<DistAndIndex> dist_and_index;
+	dist_and_index init;
+	init.index = 0;
+	double gx = m_simulator.GetGoalCenterX();
+	double gy = m_simulator.GetGoalCenterY();
+	double x_disp = gx - m_simulator.m_simulator.m_robot.m_x[0];
+	double y_disp = gy - m_simulator.m_simulator.m_robot.m_y[0];
+	double disp = sqrt(pow(x_disp,2) + pow(y_disp,2));
+	init.dist_to_goal = disp;
+	dist_and_index.push_back(init);
+	
+	int insertAt = 0;
+	
+	for(int i=1; i<NrRobots; i++) //loop starts at index 1 as sub-robot 0 has already been pushed
+	{
+		x_disp = gx - m_simulator.m_simulator.m_robot.m_x[i];
+		y_disp = gy - m_simulator.m_simulator.m_robot.m_y[i];
+		disp = sqrt(pow(x_disp,2) + pow(y_disp,2));
+
+		//step through dist_and_index
+		//until a value a dist_to_goal larger than disp is found
+		//and insert it there
+		for(vector<DistAndIndex>::iterator it = dist_and_index.begin(); it != dist_and_index.end(); ++it)
+		{
+			if(it->dist_to_goal > disp)
+			{
+				dist_and_index.insert(it,new DistAndIndex(disp,i));
+				break;
+			}
+		}
+	}
+	//new implementation goes in order of distance from goal, shortest to greatest
+	for(vector<DistAndIndex>::iterator it = dist_and_index.begin(); it != dist_and_index.end(); ++it)
+	{
+		RigidBodyMove move = m_planner->ConfigurationMove(it->index);
+		m_simulator.AddToRobotConfiguration(it->index,move.m_dx, move.m_dy, move.m_dtheta);
+	}*/
+	//old implementation goes in order of index
+	//loops thru every sub-robot, computing its next move and then applying the move
 	for(int i=0; i<m_simulator.GetNrRobots(); i++)
 	{
 		if(m_run && !m_simulator.HasRobotReachedGoal())
@@ -62,7 +111,7 @@ void Graphics::HandleEventOnTimer(void)
 			RigidBodyMove move = m_planner->ConfigurationMove(i);
 			m_simulator.AddToRobotConfiguration(i,move.m_dx, move.m_dy, move.m_dtheta);	
 		}
-	}
+	}//*/
 } 
 
 void Graphics::HandleEventOnMouseMotion(const double mousePosX, const double mousePosY)
