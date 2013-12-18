@@ -20,7 +20,7 @@ RigidBodyPlanner::~RigidBodyPlanner(void)
 
 }
 
-
+/*
 RigidBodyMove RigidBodyPlanner::ConfigurationMove(int i)
 {
 	RigidBodyMove move;
@@ -133,3 +133,89 @@ RigidBodyMove RigidBodyPlanner::ConfigurationMove(int i)
 
 	return move;
 }
+*/
+RigidBodyMove RigidBodyPlanner::ConfigurationMove(int index){
+    Clock clk;
+    StartTime(&clk);
+    RigidBodyMove move;
+    
+    Point point;
+    double xgoal = m_simulator->GetGoalCenterX(), ygoal = m_simulator->GetGoalCenterY();
+	printf("\nINSIDE CONFIGURATION-MOVE=====================>");
+    
+    //changed declaration to INT from DOUBLE
+    const int n = m_simulator->GetNrRobotVertices(index);
+    printf("\nINDEX: %d", index);
+    printf("\nNrRobotVertices: %d", n);
+    
+    const double *vert = m_simulator->GetRobotVertices(index);
+    
+    for(int robot=0; robot<n*2; robot++)
+		printf("\nVert[]: %f ", vert[robot] );
+		
+    printf("\n");
+    
+    double wgx = 0, wgy = 0;
+        
+    double Jac[3][2] = 	{	
+							{1, 0}, 
+							{0, 1}, 
+							{0, 0}	
+						};
+							
+    double theta = m_simulator->GetRobotTheta(index);
+    double mag = 0.0;
+ 
+    move.m_dx = move.m_dtheta = move.m_dy = 0.0;
+    
+    for (int j=0; j<n; ++j){	
+		
+		//ATTRACTIVE POTENTIAL
+        const double xj = vert[2*j];
+        const double yj = vert[2*j+1];
+		
+	Jac[2][0] = (-1)*xj*sin(theta) - yj*cos(theta); // Jac[1] CHECK THE SIGNS
+	Jac[2][1] =  	 xj*cos(theta) - yj*sin(theta); // Jac[2] CHECK THE SIGNS	
+
+       //this is repulsive
+	   for (int i=0; i<m_simulator->GetNrObstacles(); i++){
+	       point =  m_simulator->ClosestPointOnObstacle(i, xj, yj );
+	       wgx =  point.m_x - xj;  /* X */
+	       wgy =  point.m_y - yj; /* Y */ 
+			
+	       mag = sqrt (wgx * wgx + wgy * wgy);
+	       wgx /= (mag * mag); wgy /= (mag * mag);
+		
+		    if(mag < 0.8){
+				move.m_dx  += (Jac[0][0] * wgx + Jac[0][1] * wgy);
+				move.m_dy  += (Jac[1][0] * wgx + Jac[1][1] *wgy );
+				move.m_dtheta += (Jac[2][0] * wgx + Jac[2][1] * wgy );
+						
+		    }
+	   }
+
+        //this is attactive for this point
+		wgx = xj - xgoal;
+		wgy = yj - ygoal;
+		
+		mag = sqrt (wgx * wgx + wgy * wgy);
+		wgx /= mag; wgy /=mag;
+		
+		move.m_dx  += ( Jac[0][0] * wgx + Jac[0][1] * wgy);
+		move.m_dy  += ( Jac[1][0] * wgx + Jac[1][1] *wgy );
+		move.m_dtheta += ( Jac[2][0] * wgx + Jac[2][1] * wgy );
+	}
+    
+    if(move.m_dtheta > 0)	move.m_dtheta = -0.001;
+    else 					move.m_dtheta = 0.001;
+    
+    mag = sqrt(move.m_dx*move.m_dx + move.m_dy*move.m_dy);
+    move.m_dx = -0.05 * move.m_dx/mag;
+    move.m_dy = -0.05 * move.m_dy/mag;
+	
+	m_simulator->m_robot.m_totalSolveTime += ElapsedTime(&clk);
+	printf("\nTIMER %f",m_simulator->m_robot.m_totalSolveTime);
+	
+	return move;
+}
+
