@@ -61,8 +61,8 @@ void Graphics::HandleEventOnTimer(void){
         vector<double> goal_dist;
         double gx = m_simulator.GetGoalCenterX();
         double gy = m_simulator.GetGoalCenterY();
-        double x_disp = gx - m_simulator.m_simulator.m_robot.m_x[0];
-        double y_disp = gy - m_simulator.m_simulator.m_robot.m_y[0];
+        double x_disp = gx - m_simulator.m_robot.m_x[0];
+        double y_disp = gy - m_simulator.m_robot.m_y[0];
         double disp = sqrt(pow(x_disp,2) + pow(y_disp,2));
         
         index.push_back(0);
@@ -72,8 +72,8 @@ void Graphics::HandleEventOnTimer(void){
         
         for(int i=1; i<NrRobots; i++) //loop starts at index 1 as sub-robot 0 has already been pushed
         {
-                x_disp = gx - m_simulator.m_simulator.m_robot.m_x[i];
-                y_disp = gy - m_simulator.m_simulator.m_robot.m_y[i];
+                x_disp = gx - m_simulator.m_robot.m_x[i];
+                y_disp = gy - m_simulator.m_robot.m_y[i];
                 disp = sqrt(pow(x_disp,2) + pow(y_disp,2));
 
                 //step through dist_and_index
