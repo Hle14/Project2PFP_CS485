@@ -93,7 +93,7 @@ public:
     	
     	for(int j=0;j<m_robot.currVertices[i].size();j++)
     	{
-    		double new_distance = sqrt(pow(C.x - m.robot.currVertices[j],2) + pow(C.y - m.robot.initVertices[j+1],2));
+    		double new_distance = sqrt(pow(C.x - m.robot.currVertices[i][j],2) + pow(C.y - m.robot.currVertices[i][j+1],2));
     		if(new_distance < radius)
     		{
     			radius = new_distance;
