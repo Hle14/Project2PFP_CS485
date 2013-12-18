@@ -54,6 +54,51 @@ void Graphics::MainLoop(void){
 }
 
 void Graphics::HandleEventOnTimer(void){
+
+        int NrRobots = m_simulator.GetNrRobots();
+        
+        vector<int> index;
+        vector<double> goal_dist;
+        double gx = m_simulator.GetGoalCenterX();
+        double gy = m_simulator.GetGoalCenterY();
+        double x_disp = gx - m_simulator.m_simulator.m_robot.m_x[0];
+        double y_disp = gy - m_simulator.m_simulator.m_robot.m_y[0];
+        double disp = sqrt(pow(x_disp,2) + pow(y_disp,2));
+        
+        index.push_back(0);
+        goal_dist.push_back(disp);
+        
+        int insertAt = 0;
+        
+        for(int i=1; i<NrRobots; i++) //loop starts at index 1 as sub-robot 0 has already been pushed
+        {
+                x_disp = gx - m_simulator.m_simulator.m_robot.m_x[i];
+                y_disp = gy - m_simulator.m_simulator.m_robot.m_y[i];
+                disp = sqrt(pow(x_disp,2) + pow(y_disp,2));
+
+                //step through dist_and_index
+                //until a value a dist_to_goal larger than disp is found
+                //and insert it there
+                for(int j=0; j<index.size(); j++)
+                {
+                        if(goal_dist[i] > disp)
+                        {
+                                goal_dist.insert(goal_dist.begin()+j, disp);
+                                index.insert(index.begin()+j,i);
+                                break;
+                        } else if(j == index.size() - 1)
+                        {
+                        	goal_dist.push_back(disp);
+                        	index.push_back(i);
+                        }
+                }
+        }
+        //new implementation goes in order of distance from goal, shortest to greatest
+        for(int i=0; i<index.size(); i++)
+        {
+                RigidBodyMove move = m_planner->ConfigurationMove(index[i]);
+                m_simulator.AddToRobotConfiguration(index[i],move.m_dx, move.m_dy, move.m_dtheta);
+        }
         /*
         struct DistAndIndex
         {
@@ -102,7 +147,7 @@ void Graphics::HandleEventOnTimer(void){
                 m_simulator.AddToRobotConfiguration(it->index,move.m_dx, move.m_dy, move.m_dtheta);
         }*/
         //old implementation goes in order of index
-        //loops thru every sub-robot, computing its next move and then applying the move
+        /*/loops thru every sub-robot, computing its next move and then applying the move
         for(int i=0; i<m_simulator.GetNrRobots(); i++)
         {
                 if(m_run && !m_simulator.HasRobotReachedGoal())
