@@ -93,7 +93,21 @@ void RigidBodySimulator::ReadRobot(const char fname[]){
 		
 		if(fscanf(in, "%d", &n ) != 1)
 			return;
-		// n, stores the number of robots 
+		// n, stores the number of robots
+		
+		//for-loop stores x,y,theta values for each robot
+		for(int xyt=0; xyt<n; xyt++){
+	                //workspace goes from (-22,-14) on bottom left to (22,14) on top right
+	                m_robot.m_x.push_back((int)pow(-1,rand()%2)*rand()%22); /*rand using x-range coordinates -22~22*/
+	                m_robot.m_y.push_back((int)pow(-1,rand()%2)*rand()%14); /*rand using y-range coordinates* -14~14*/
+	                /*should replace rand() above with function that returns a float/double instead of int for better implementation*/
+	                m_robot.m_theta.push_back(0);
+	                
+	                /**WILL ALSO NEED TO CHECK EACH NEW SUB-ROBOT FOR COLLISION BEFORE ADDING IT TO SUPER-ROBOT
+	                PROBABLY GENERATE PARAMETERS FIRST, CHECK FOR COLLISION, THEN
+	                IF NO COLLISION -> PUSH_BACK PARAMETERS, ELSE DO NOTHING*/
+		}
+		
 		printf("\nNumber of Robots: ===========================> <%d>", n);
 		int line[n]; //will store all vertices of the total #-of robots
 		
